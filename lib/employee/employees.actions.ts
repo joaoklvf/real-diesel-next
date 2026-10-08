@@ -4,16 +4,16 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { Pool } from "pg";
 import { QueryBuilder } from '../query-builder';
-import { Driver, IDriverForm } from './drivers.definitions';
+import { employee, IemployeeForm } from './employees.definitions';
 import { convertDateStr, convertDecimalStr } from '../utils';
 
 const pool = new Pool({
   connectionString: process.env.POSTGRES_URL, ssl: true
 });
 
-export async function createDriver(data: IDriverForm) {
+export async function createemployee(data: IemployeeForm) {
   const request = getRequest(data);
-  const qb = new QueryBuilder("drivers")
+  const qb = new QueryBuilder("employees")
     .setFromObject(request);
 
   const { query, values } = qb.insert();
@@ -27,22 +27,22 @@ export async function createDriver(data: IDriverForm) {
     console.error(error)
 
     return {
-      message: 'Erro ao cadastrar motorista',
+      message: 'Erro ao cadastrar colaborador',
     };
   }
   finally {
     client.release();
   }
 
-  revalidatePath('/dashboard/motoristas');
-  redirect('/dashboard/motoristas');
+  revalidatePath('/dashboard/colaboradores');
+  redirect('/dashboard/colaboradores');
 }
-export async function updateDriver(
+export async function updateemployee(
   id: string,
-  data: IDriverForm
+  data: IemployeeForm
 ) {
   const request = getRequest(data);
-  const qb = new QueryBuilder("drivers")
+  const qb = new QueryBuilder("employees")
     .setFromObject(request);
 
   const { query, values } = qb.update({ id });
@@ -53,15 +53,15 @@ export async function updateDriver(
     await client.query(query, values);
   } catch (error) {
     console.error(error)
-    return { message: 'Erro ao atualizar motorista' };
+    return { message: 'Erro ao atualizar colaborador' };
   }
 
-  revalidatePath('/dashboard/motoristas');
-  redirect('/dashboard/motoristas');
+  revalidatePath('/dashboard/colaboradores');
+  redirect('/dashboard/colaboradores');
 }
 
-export async function deleteDriver(id: string) {
-  const qb = new QueryBuilder("drivers");
+export async function deleteemployee(id: string) {
+  const qb = new QueryBuilder("employees");
 
   const { query, values } = qb.delete({ id });
 
@@ -71,13 +71,13 @@ export async function deleteDriver(id: string) {
     await client.query(query, values);
   } catch (error) {
     console.error(error)
-    console.log('Erro ao deletar motorista');
+    console.log('Erro ao deletar colaborador');
   }
   revalidatePath('/dashboard/caminhoes');
 }
 
-function getRequest(data: IDriverForm) {
-  const request: Partial<Driver> = {
+function getRequest(data: IemployeeForm) {
+  const request: Partial<employee> = {
     ...data,
     id: '',
     birth_date: convertDateStr(data.birth_date),

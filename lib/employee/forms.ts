@@ -1,7 +1,7 @@
 import { FieldMapper } from "../definitions";
-import { IDriverForm } from "./drivers.definitions";
+import { IemployeeForm } from "./employees.definitions";
 
-export const DRIVER_FIELDS: FieldMapper<IDriverForm> = [
+export const employee_FIELDS: FieldMapper<IemployeeForm> = [
   { label: 'Nome', name: 'name', icon: 'UserIcon', maxLength: 1000 },
   { label: 'RG', name: 'rg', icon: 'DocumentIcon', maxLength: 12 },
   { label: 'CPF', name: 'cpf', icon: 'DocumentIcon', maxLength: 14 },

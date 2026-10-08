@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { DEFAULT_STRING_REQUIRED, DEFAULT_STRING_NULLABLE, DEFAULT_NUMBER_REQUIRED } from "../definitions";
 
-export type Driver = {
+export type employee = {
   id: string;
   name: string;
   rg: string | null;
@@ -11,13 +11,13 @@ export type Driver = {
   commission_percentage: number;
 };
 
-export type DriversTable = {
+export type employeesTable = {
   id: string;
   name: string;
   phone_number: string;
 };
 
-export type DriverField = {
+export type employeeField = {
   id: string;
   name: string;
   commission_percentage: number;
@@ -43,4 +43,4 @@ export const EMPTY_FORM = {
   commission_percentage: '',
 };
 
-export type IDriverForm = typeof EMPTY_FORM;
+export type IemployeeForm = typeof EMPTY_FORM;

@@ -1,38 +1,38 @@
 import postgres from 'postgres';
-import { Driver, DriverField, DriversTable } from './drivers.definitions';
+import { employee, employeeField, employeesTable } from './employees.definitions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 const ITEMS_PER_PAGE = 6;
 
-export async function fetchDrivers() {
+export async function fetchemployees() {
   try {
-    const drivers = await sql<DriverField[]>`
+    const employees = await sql<employeeField[]>`
       SELECT
         id,
         name
-      FROM drivers
+      FROM employees
       ORDER BY name ASC
     `;
 
-    return drivers;
+    return employees;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all drivers.');
+    throw new Error('Failed to fetch all employees.');
   }
 }
 
-export async function fetchFilteredDrivers(
+export async function fetchFilteredemployees(
   query: string,
   currentPage: number,
 ) {
   const offset = (currentPage - 1) * ITEMS_PER_PAGE;
 
   try {
-    const drivers = await sql<DriversTable[]>`
+    const employees = await sql<employeesTable[]>`
       SELECT
         *
-      FROM drivers
+      FROM employees
       WHERE
         name ILIKE ${`%${query}%`} OR
         rg ILIKE ${`%${query}%`} OR
@@ -43,17 +43,17 @@ export async function fetchFilteredDrivers(
       LIMIT ${ITEMS_PER_PAGE} OFFSET ${offset}
     `;
     
-    return drivers;
+    return employees;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch drivers.');
+    throw new Error('Failed to fetch employees.');
   }
 }
 
-export async function fetchDriversPages(query: string) {
+export async function fetchemployeesPages(query: string) {
   try {
     const data = await sql`SELECT COUNT(*)
-    FROM drivers
+    FROM employees
     WHERE
       name ILIKE ${`%${query}%`} OR
       rg ILIKE ${`%${query}%`} OR
@@ -67,26 +67,26 @@ export async function fetchDriversPages(query: string) {
     return totalPages;
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch total number of drivers.');
+    throw new Error('Failed to fetch total number of employees.');
   }
 }
 
-export async function fetchDriverById(id: string) {
+export async function fetchemployeeById(id: string) {
   try {
-    const data = await sql<Driver[]>`
+    const data = await sql<employee[]>`
       SELECT
         *
-      FROM drivers
-      WHERE drivers.id = ${id};
+      FROM employees
+      WHERE employees.id = ${id};
     `;
 
-    const driver = data.map((driver) => ({
-      ...driver,
+    const employee = data.map((employee) => ({
+      ...employee,
     }));
 
-    return driver[0];
+    return employee[0];
   } catch (error) {
     console.error('Database Error:', error);
-    throw new Error('Failed to fetch driver.');
+    throw new Error('Failed to fetch employee.');
   }
 }
